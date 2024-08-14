@@ -52,10 +52,6 @@ export const users = createTable("user", {
     withTimezone: true,
   }).default(sql`CURRENT_TIMESTAMP`),
   image: varchar("image", { length: 255 }),
-  // isAutoincrement: boolean("isAutoincrement"),
-  // isPrimaryKey: boolean("isPrimaryKey"),
-  // hasRuntimeDefault: boolean("hasRuntimeDefault"),
-  // generated: boolean("generated"),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
