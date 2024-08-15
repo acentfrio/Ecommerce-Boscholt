@@ -13,7 +13,9 @@
     "lint": "next lint",
     "start": "next start",
     "lefthook": "lefthook",
-    "prepare": "husky"
+    "prepare": "husky",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,md,mdx,css,yaml,yml}\"",
+    "check": "prettier --check \"**/*.{ts,tsx,js,jsx,md,mdx,css,yaml,yml}\""
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.4.2",
