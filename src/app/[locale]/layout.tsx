@@ -1,5 +1,7 @@
 import "@/styles/globals.css";
 
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
 import { GeistSans } from "geist/font/sans";
 import { ThemeProvider } from "@/components/theme-provider";
 import { type Metadata } from "next";
@@ -13,11 +15,14 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+  params: { locale },
+}: Readonly<{ children: React.ReactNode; params: { locale: string } }>) {
+  const messages = await getMessages();
+  console.log(messages);
   return (
-    <html lang="en" className={`${GeistSans.variable}`}>
+    <html lang={locale} className={`${GeistSans.variable}`}>
       <body>
         <TRPCReactProvider>
           <ThemeProvider
@@ -26,10 +31,12 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <header className="border-border/40 bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 w-full backdrop-blur">
-              <NavigationMenu />
-            </header>
-            {children}
+            <NextIntlClientProvider messages={messages}>
+              <header className="sticky top-0 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                <NavigationMenu />
+              </header>
+              {children}
+            </NextIntlClientProvider>
           </ThemeProvider>
         </TRPCReactProvider>
       </body>
