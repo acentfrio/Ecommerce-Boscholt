@@ -8,6 +8,7 @@ import { type Metadata } from "next";
 
 import { TRPCReactProvider } from "@/trpc/react";
 import { NavigationMenu } from "@/components/integration/navigation-menu";
+import { Footer } from "@/components/integration/footer";
 
 export const metadata: Metadata = {
   title: "Boscholt Orders",
@@ -36,6 +37,9 @@ export default async function RootLayout({
                 <NavigationMenu />
               </header>
               {children}
+              <footer>
+                <Footer />
+              </footer>
             </NextIntlClientProvider>
           </ThemeProvider>
         </TRPCReactProvider>

@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 const config = {
   darkMode: ["class"],
@@ -74,7 +75,17 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    plugin(({ addUtilities }) => {
+      const newUtilities = {
+        ".custom": {
+          position: "relative",
+        },
+      };
+      addUtilities(newUtilities);
+    }),
+  ],
 } satisfies Config;
 
 export default config;
