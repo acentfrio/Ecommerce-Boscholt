@@ -1,7 +1,5 @@
-"use client";
-
 import * as React from "react";
-import { Link, usePathname } from "@/navigation";
+import { Link } from "@/navigation";
 import { cn } from "@/lib/utils";
 import {
   NavigationMenu as NavigationMenuPrimitive,
@@ -13,6 +11,7 @@ import {
 import { ModeToggle } from "./mode-toggle";
 import LocaleSwitcher from "./locale-switcher";
 import { Circle, Milk, ShoppingBasket } from "lucide-react";
+import { AuthenticationStatus } from "../authentication-status";
 
 export function NavigationMenu() {
   return (
@@ -75,6 +74,7 @@ export function NavigationMenu() {
         </Link>
         <ModeToggle />
         <LocaleSwitcher />
+        <AuthenticationStatus />
       </div>
     </NavigationMenuPrimitive>
   );
