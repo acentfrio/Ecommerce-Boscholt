@@ -1,6 +1,6 @@
 {
-  "id": "75889220-8156-4407-bcfc-3dfb92e3866f",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "65442662-ce0c-4ccd-a903-b4f0ff617142",
+  "prevId": "75889220-8156-4407-bcfc-3dfb92e3866f",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -214,13 +214,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "unit_of_measure": {
-          "name": "unit_of_measure",
-          "type": "unit_of_measure",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
         "quantity": {
           "name": "quantity",
           "type": "numeric(10, 2)",
@@ -287,6 +280,13 @@
         "price": {
           "name": "price",
           "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "unit_of_measure": {
+          "name": "unit_of_measure",
+          "type": "unit_of_measure",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         }

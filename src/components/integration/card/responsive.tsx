@@ -11,12 +11,11 @@ import {
 import Image from "next/image";
 
 import { cn } from "@/lib/utils";
-
 type Product = {
-  id: number;
+  id: string;
   name: string;
   description: string;
-  price: number;
+  price: string;
 };
 const notifications = [
   {
@@ -39,7 +38,7 @@ export const Card = ({
 }: {
   product: Product;
   className?: string;
-  key?: number;
+  key?: string;
 }) => {
   return (
     <CardPrimitive key={key} className="flex flex-col">
@@ -50,6 +49,7 @@ export const Card = ({
           layout="fill"
           objectFit="cover"
           className="rounded-md"
+          
         />
       </CardContent>
       <div className="flex flex-col p-4">
@@ -57,6 +57,9 @@ export const Card = ({
         <CardDescription className="mt-2 text-sm">
           {product.description}
         </CardDescription>
+        <div className="mt-2 text-sm font-semibold">
+          Price: ${product.price}
+        </div>
         <CardFooter className="mt-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Button size="sm" variant="outline">

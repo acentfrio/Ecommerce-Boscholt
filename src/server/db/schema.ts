@@ -8,37 +8,14 @@ import {
   text,
   timestamp,
   varchar,
+  pgEnum,
+  numeric,
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
-/**
- * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
- * database instance for multiple projects.
- *
- * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
- */
-export const createTable = pgTableCreator((name) => `${name}`);
+import { type InferSelectModel, type InferInsertModel } from "drizzle-orm";
 
-export const posts = createTable(
-  "post",
-  {
-    id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
-    createdById: varchar("created_by", { length: 255 })
-      .notNull()
-      .references(() => users.id),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-      () => new Date(),
-    ),
-  },
-  (example) => ({
-    createdByIdIdx: index("created_by_idx").on(example.createdById),
-    nameIndex: index("name_idx").on(example.name),
-  }),
-);
+export const createTable = pgTableCreator((name) => `${name}`);
 
 export const users = createTable("user", {
   id: varchar("id", { length: 255 })
@@ -56,6 +33,7 @@ export const users = createTable("user", {
 
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
+  orders: many(orders),
 }));
 
 export const accounts = createTable(
@@ -128,3 +106,80 @@ export const verificationTokens = createTable(
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   }),
 );
+
+export const unitOfMeasureEnum = pgEnum("unit_of_measure", ["l", "kg"]);
+
+export const products = createTable(
+  "product",
+  {
+    id: varchar("id", { length: 255 }).notNull().primaryKey(),
+    name: varchar("name", { length: 255 }).notNull(),
+    price: numeric("price", { precision: 10, scale: 2 }).notNull(),
+    unitOfMeasure: unitOfMeasureEnum("unit_of_measure").notNull(),
+  },
+  (product) => ({
+    nameIdx: index("product_name_idx").on(product.name),
+  }),
+);
+
+export const orders = createTable(
+  "order",
+  {
+    id: serial("id").primaryKey(),
+    userId: varchar("user_id", { length: 255 })
+      .notNull()
+      .references(() => users.id),
+    creationDate: timestamp("creation_date", {
+      mode: "date",
+      withTimezone: true,
+    })
+      .notNull()
+      .defaultNow(),
+    orderDate: timestamp("order_date", {
+      mode: "date",
+      withTimezone: true,
+    }).notNull(),
+  },
+  (order) => ({
+    orderDateIdx: index("order_order_date_idx").on(order.orderDate),
+    userIdIdx: index("order_user_id_idx").on(order.userId),
+  }),
+);
+
+export const ordersProducts = createTable(
+  "order_product",
+  {
+    orderId: integer("order_id")
+      .notNull()
+      .references(() => orders.id),
+    productId: varchar("product_id", { length: 255 })
+      .notNull()
+      .references(() => products.id),
+    quantity: numeric("quantity", { precision: 10, scale: 2 }).notNull(),
+  },
+  (orderProduct) => ({
+    compoundKey: primaryKey({
+      columns: [orderProduct.orderId, orderProduct.productId],
+    }),
+  }),
+);
+
+export const productsRelations = relations(products, ({ many }) => ({
+  orders: many(ordersProducts),
+}));
+
+export const ordersProductsRelations = relations(ordersProducts, ({ one }) => ({
+  order: one(orders, {
+    fields: [ordersProducts.orderId],
+    references: [orders.id],
+  }),
+  product: one(products, {
+    fields: [ordersProducts.productId],
+    references: [products.id],
+  }),
+}));
+
+export const ordersRelations = relations(orders, ({ one, many }) => ({
+  user: one(users, { fields: [orders.userId], references: [users.id] }),
+  products: many(ordersProducts),
+}));

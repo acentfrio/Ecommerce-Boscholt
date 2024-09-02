@@ -1,19 +1,22 @@
 import { Card } from "@/components/integration/card/responsive";
 import { Grid } from "@/components/integration/grid";
+import { api, HydrateClient } from "@/trpc/server";
 
-const Page = () => {
+const Page = async () => {
+  const products = await api.products.listProducts();
+
   return (
     <section>
       <Grid>
-        {Array.from({ length: 10 }).map((_, index) => (
+        {products.map(({ id, name, price }) => (
           <Card
-            key={index}
+            key={id}
             product={{
-              id: index,
-              name: "Product 1",
+              id,
+              name,
               description:
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus.",
-              price: 100,
+              price,
             }}
           />
         ))}

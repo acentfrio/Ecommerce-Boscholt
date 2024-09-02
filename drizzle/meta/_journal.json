@@ -1,12 +1,19 @@
 {
-  "version": "6",
+  "version": "7",
   "dialect": "postgresql",
   "entries": [
     {
       "idx": 0,
-      "version": "6",
-      "when": 1723631606399,
-      "tag": "0000_solid_omega_red",
+      "version": "7",
+      "when": 1725271628564,
+      "tag": "0000_thick_onslaught",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1725272679766,
+      "tag": "0001_stale_pixie",
       "breakpoints": true
     }
   ]
