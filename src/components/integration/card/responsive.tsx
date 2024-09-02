@@ -49,7 +49,6 @@ export const Card = ({
           layout="fill"
           objectFit="cover"
           className="rounded-md"
-          
         />
       </CardContent>
       <div className="flex flex-col p-4">
