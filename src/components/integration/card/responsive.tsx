@@ -1,5 +1,11 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
+import { useState } from 'react';
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@/components/ui/toggle-group"
 import {
   CardHeader,
   CardContent,
@@ -10,28 +16,32 @@ import {
 } from "@/components/ui/card";
 import Image from "next/image";
 
+import { Input } from "@/components/ui/input";
+
 import { cn } from "@/lib/utils";
-type Product = {
+export type Product = {
   id: string;
   name: string;
-  description: string;
-  price: string;
+  price: number;
+  unitOfMeasure: "l" | "kg";
+  description?: string;
 };
-const notifications = [
-  {
-    title: "Your call has been confirmed.",
-    description: "1 hour ago",
-  },
-  {
-    title: "You have a new message!",
-    description: "1 hour ago",
-  },
-  {
-    title: "Your subscription is expiring soon!",
-    description: "2 hours ago",
-  },
-];
 
+const toggleSchema = {
+  "l": [
+    { value: "0.25", label: "0.25L" },
+    { value: "0.5", label: "0.5L" },
+    { value: "1", label: "1L" },
+    { value: "2", label: "2L" },
+    { value: "5", label: "5L" },
+  ],
+  "kg": [
+    { value: "0.1", label: "100g" },
+    { value: "0.25", label: "250g" },
+    { value: "0.5", label: "500g" },
+    { value: "1", label: "1kg" },
+  ],
+}
 export const Card = ({
   product,
   key,
@@ -40,6 +50,17 @@ export const Card = ({
   className?: string;
   key?: string;
 }) => {
+
+  const [amount, setAmount] = useState('1');
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (/^\d*\.?\d*$/.test(value)) {
+      setAmount(value);
+    }
+  };
+  
+  console.log(product)
   return (
     <CardPrimitive key={key} className="flex flex-col">
       <CardContent className="relative flex aspect-square w-full items-center justify-center rounded-md">
@@ -50,6 +71,7 @@ export const Card = ({
           objectFit="cover"
           className="rounded-md"
         />
+        
       </CardContent>
       <div className="flex flex-col p-4">
         <h3 className="text-lg font-bold">{product.name}</h3>
@@ -59,17 +81,20 @@ export const Card = ({
         <div className="mt-2 text-sm font-semibold">
           Price: ${product.price}
         </div>
-        <CardFooter className="mt-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Button size="sm" variant="outline">
-              -
-            </Button>
-            <span>1</span>
-            <Button size="sm" variant="outline">
-              +
-            </Button>
+        <CardFooter className="mt-4 flex flex-col gap-2">
+          <div className="flex items-center justify-between w-full">
+          <ToggleGroup type="single" variant="outline" >
+          {
+          
+          toggleSchema[product.unitOfMeasure].map((item) => (
+            <ToggleGroupItem key={item.value} value={item.value} className="w-1/5">
+              {item.label}
+            </ToggleGroupItem>
+          ))}
+        </ToggleGroup>
+            
           </div>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" className="w-full">
             Add to Cart
           </Button>
         </CardFooter>

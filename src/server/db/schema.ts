@@ -109,6 +109,8 @@ export const verificationTokens = createTable(
 
 export const unitOfMeasureEnum = pgEnum("unit_of_measure", ["l", "kg"]);
 
+
+
 export const products = createTable(
   "product",
   {
@@ -116,6 +118,7 @@ export const products = createTable(
     name: varchar("name", { length: 255 }).notNull(),
     price: numeric("price", { precision: 10, scale: 2 }).notNull(),
     unitOfMeasure: unitOfMeasureEnum("unit_of_measure").notNull(),
+    description: text("description"),
   },
   (product) => ({
     nameIdx: index("product_name_idx").on(product.name),
