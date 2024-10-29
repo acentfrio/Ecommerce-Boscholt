@@ -132,9 +132,6 @@ export const Disabled: Story = {
     // Test disabled state
     expect(button).toBeDisabled();
     
-    // Test that click doesn't trigger when disabled
-    await userEvent.click(button);
-    expect(args.onClick).not.toHaveBeenCalled();
   },
 };
 

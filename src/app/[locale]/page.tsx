@@ -15,7 +15,7 @@ const Page = async () => {
           <div className="container grid gap-32 py-6">
             <Hero1 />
             <Hero />
-            <Carousel />
+            {/* <Carousel /> */}
           </div>
         </div>
       </main>
